@@ -8,6 +8,8 @@ import com.projeto.usuario.infrastrutcure.entity.Telefone;
 import com.projeto.usuario.infrastrutcure.entity.Usuario;
 import org.springframework.stereotype.Component;
 
+
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -19,7 +21,7 @@ public class UsuarioConverter {
                  .email(usuarioDto.getEmail())
                  .senha(usuarioDto.getSenha())
                  .enderecos(paralistaEndereco(usuarioDto.getEnderecos()))
-                 .telefones(paralistaTelefone(usuarioDto.getTelefone()))
+                 .telefones(paralistaTelefone(usuarioDto.getTelefones()))
                  .build();
 
     }
@@ -40,6 +42,9 @@ public class UsuarioConverter {
                 .build();
     }
     public List<Telefone> paralistaTelefone(List<TelefoneDto> telefoneDtos){
+        if(telefoneDtos == null || telefoneDtos.isEmpty()){
+            return Collections.emptyList();
+        }
         return telefoneDtos.stream().map((this::paraTelefone)).toList();
     }
 
@@ -61,7 +66,7 @@ public class UsuarioConverter {
                 .email(usuario.getEmail())
                 .senha(usuario.getSenha())
                 .enderecos(paralistaEnderecoDto(usuario.getEnderecos()))
-                .telefone(paralistaTelefoneDto(usuario.getTelefones()))
+                .telefones(paralistaTelefoneDto(usuario.getTelefones()))
                 .build();
 
     }
