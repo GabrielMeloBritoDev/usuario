@@ -16,5 +16,5 @@ public class UsuarioDto {
     private String email;
     private String senha;
     private List<EnderecoDto> enderecos;
-    private List<TelefoneDto> telefone;
+    private List<TelefoneDto> telefones;
 }
