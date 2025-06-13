@@ -77,6 +77,7 @@ public class UsuarioConverter {
 
     public EnderecoDto paraEnderecoDto(Endereco endereco){
         return  EnderecoDto.builder()
+                .id(endereco.getId())
                 .rua(endereco.getRua())
                 .numero(endereco.getNumero())
                 .cidade(endereco.getCidade())
@@ -92,9 +93,42 @@ public class UsuarioConverter {
 
     public TelefoneDto paraTelefoneDto(Telefone telefone){
         return TelefoneDto.builder()
+                .id(telefone.getId())
                 .numero(telefone.getNumero())
                 .ddd(telefone.getDdd())
                 .build();
     }
 
+    // Metodo de atualizar somente o usuario, sem  endereco e telefone
+    public Usuario atualizarDto (UsuarioDto usuarioDto, Usuario entity){
+        return  Usuario.builder()
+                .nome(usuarioDto.getNome() != null ? usuarioDto.getNome() : entity.getNome())
+                .id(entity.getId())
+                .senha(usuarioDto.getSenha() !=  null ? usuarioDto.getSenha() : entity.getSenha())
+                .email(usuarioDto.getEmail() != null ? usuarioDto.getEmail() : entity.getEmail())
+                .enderecos(entity.getEnderecos())
+                .telefones(entity.getTelefones())
+                .build();
+    }
+
+    public Endereco atualizarEndereco (EnderecoDto enderecoDto, Endereco endereco){
+        return  Endereco.builder()
+                .id(endereco.getId())
+                .rua(enderecoDto.getRua() != null ? enderecoDto.getRua() : endereco.getRua())
+                .numero(enderecoDto.getNumero() != null ? enderecoDto.getNumero() : endereco.getNumero())
+                .cidade(enderecoDto.getCidade() != null ? enderecoDto.getCidade() : endereco.getCidade())
+                .cep(enderecoDto.getCep() != null ? enderecoDto.getCep() : endereco.getCep())
+                .complemento(enderecoDto.getComplemento() != null ? enderecoDto.getComplemento() : endereco.getComplemento())
+                .estado(enderecoDto.getEstado() != null ? enderecoDto.getEstado() : endereco.getEstado())
+                .build();
+    }
+
+
+    public Telefone atualizaTelefone(TelefoneDto telefoneDto, Telefone telefone) {
+        return Telefone.builder()
+                .id(telefone.getId())
+                .numero(telefoneDto.getNumero() != null ? telefoneDto.getNumero() : telefone.getNumero())
+                .ddd(telefoneDto.getDdd() != null ? telefoneDto.getDdd() : telefone.getDdd() )
+                .build();
+    }
 }
