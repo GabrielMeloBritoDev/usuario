@@ -27,7 +27,7 @@ public class usuarioController {
     public ResponseEntity<UsuarioDto> salvaUsuario(@RequestBody UsuarioDto usuarioDto){
         return ResponseEntity.ok(usuarioService.salvaUsuario(usuarioDto));
     }
-
+    //Cadastro de login
     @PostMapping("/login")
     public String login(@RequestBody UsuarioDto usuarioDto){
         Authentication authentication = authenticationManager.authenticate(
@@ -35,16 +35,23 @@ public class usuarioController {
         );
         return "Bearer " + jwtUtil.generateToken(authentication.getName());
     }
-
+    //Buscar usuario por email
     @GetMapping
     public ResponseEntity<Usuario>  buscarUsuarioPorEmail(@RequestParam("email") String email){
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
     }
-
+    //Deletar usuario por email
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> deleteUsuarioPorEmail(@PathVariable String email){
         usuarioService.deletaUsuarioPorEmail(email);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDto> atualizarDadosUsuario(@RequestBody UsuarioDto dto,
+                                                            @RequestHeader("Authorization")String token){
+
+        return   ResponseEntity.ok(usuarioService.atualizarDadosUsuario(token,dto));
     }
 
 }

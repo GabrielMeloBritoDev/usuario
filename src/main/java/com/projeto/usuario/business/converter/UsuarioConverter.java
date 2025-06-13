@@ -97,4 +97,16 @@ public class UsuarioConverter {
                 .build();
     }
 
+    // Metodo de atualizar somento o usuario, sem  endereco e telefone
+    public Usuario atualizarDto (UsuarioDto usuarioDto, Usuario entity){
+        return  Usuario.builder()
+                .nome(usuarioDto.getNome() != null ? usuarioDto.getNome() : entity.getNome())
+                .id(entity.getId())
+                .senha(usuarioDto.getSenha() !=  null ? usuarioDto.getSenha() : entity.getSenha())
+                .email(usuarioDto.getEmail() != null ? usuarioDto.getEmail() : entity.getEmail())
+                .enderecos(entity.getEnderecos())
+                .telefones(entity.getTelefones())
+                .build();
+    }
+
 }

@@ -6,6 +6,7 @@ import com.projeto.usuario.infrastrutcure.entity.Usuario;
 import com.projeto.usuario.infrastrutcure.exceptions.ConflictException;
 import com.projeto.usuario.infrastrutcure.exceptions.ResourceNotFoundException;
 import com.projeto.usuario.infrastrutcure.repository.UsuarioRepository;
+import com.projeto.usuario.infrastrutcure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class UsuarioSevice {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
-
+    private final JwtUtil jwtUtil;
 
     public UsuarioDto salvaUsuario(UsuarioDto usuarioDto){
 
@@ -50,5 +51,18 @@ public class UsuarioSevice {
 
     public void deletaUsuarioPorEmail(String email){
         usuarioRepository.deleteByEmail(email);
+    }
+
+    public UsuarioDto atualizarDadosUsuario(String token ,UsuarioDto dto){
+        //Aqui busquei tirar a obriatoriedade do email
+      String email =  jwtUtil.extrairEmailDoToken(token.substring(7));
+        //crip de senha
+      dto.setSenha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null);
+      //Busquei os dado no BD
+        Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(()->
+                new ResourceNotFoundException("Email não localizado"));
+
+        Usuario usuario = usuarioConverter.atualizarDto(dto, usuarioEntity);
+        return  usuarioConverter.paraUsuarioDto(usuarioRepository.save(usuario));
     }
 }
