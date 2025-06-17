@@ -1,5 +1,6 @@
 package com.projeto.usuario.business;
 
+import com.projeto.usuario.UsuarioApplication;
 import com.projeto.usuario.business.Dto.EnderecoDto;
 import com.projeto.usuario.business.Dto.TelefoneDto;
 import com.projeto.usuario.business.Dto.UsuarioDto;
@@ -103,5 +104,23 @@ public class UsuarioSevice {
         Telefone telefone = usuarioConverter.atualizaTelefone(telefoneDto, tel );
         return usuarioConverter.paraTelefoneDto(telefoneRepository.save(telefone));
 
+    }
+
+    public EnderecoDto cadastraEndereco(String token, EnderecoDto enderecoDto){
+        String email = jwtUtil.extrairEmailDoToken(token.substring(7));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(()->
+                new ResourceNotFoundException("Email não localizado "+email));
+        Endereco endereco = usuarioConverter.paraEnderecoEntity(enderecoDto, usuario.getId());
+        return usuarioConverter.paraEnderecoDto(enderecoRepository.save(endereco));
+    }
+
+
+    public TelefoneDto cadastraTelefone(String token, TelefoneDto  telefoneDto){
+        String email = jwtUtil.extrairEmailDoToken(token.substring(7));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(()->
+                new ResourceNotFoundException("Email não localizado "+email));
+        Telefone telefone = usuarioConverter.paraTelefoneEntity(telefoneDto, usuario.getId());
+
+        return usuarioConverter.paraTelefoneDto(telefoneRepository.save(telefone));
     }
 }
